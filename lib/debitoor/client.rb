@@ -1,4 +1,5 @@
 require "debitoor/version"
+require "httparty"
 
 module Debitoor
   class Client
