@@ -5,7 +5,7 @@ require 'debitoor/client/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "debitoor-client"
-  spec.version       = Debitoor::Client::VERSION
+  spec.version       = Debitoor::VERSION
   spec.authors       = ["Alessio Santo"]
   spec.email         = ["alessio.santocs@gmail.com"]
 

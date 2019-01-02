@@ -1,4 +1,4 @@
-require "debitoor/client/version"
+require "debitoor/version"
 
 module Debitoor
   class Client
