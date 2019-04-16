@@ -28,6 +28,39 @@ module Debitoor
       }.merge!(@options)
 
       response = nil
+      id = invoice_id(id_or_response_invoice)
+
+      response = self.class.post("/api/sales/draftinvoices/#{id}/book/v3", options) if id.present?
+      respond_with!(response)
+    end
+
+    def share_invoice(id_or_response_invoice, email, subject="Here's your receipt")
+      options = {
+        body: {recipient: email, subject: subject}.to_json
+      }.merge!(@options)
+
+      response = nil
+      id = invoice_id(id_or_response_invoice)
+
+      response = self.class.post("/api/sales/invoices/#{id}/share/v1", options) if id.present?
+      respond_with!(response)
+    end
+
+    def email_invoice(id_or_response_invoice, email, subject="Here's your receipt", message="")
+      options = {
+        body: {recipient: email, subject: subject, message: message}.to_json
+      }.merge!(@options)
+
+      response = nil
+      id = invoice_id(id_or_response_invoice)
+
+      response = self.class.post("/api/sales/invoices/#{id}/email/v2", options) if id.present?
+      respond_with!(response)
+    end
+
+    private
+
+    def invoice_id(id_or_response_invoice)
       id = nil
       id = id_or_response_invoice if id_or_response_invoice.kind_of?(String)
 
@@ -35,12 +68,8 @@ module Debitoor
         id = id_or_response_invoice.parsed_response["id"]
       end
 
-      puts options
-      response = self.class.post("/api/sales/draftinvoices/#{id}/book/v3", options) if id.present?
-      respond_with!(response)
+      return id
     end
-
-    private
 
     def respond_with!(response)
       raise(response.inspect) unless response.code.to_s.start_with?("2")
