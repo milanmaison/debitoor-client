@@ -8,7 +8,10 @@ module Debitoor
 
     def initialize(token)
       @token = token
-      @options = { headers: {"x-token" => token} }
+      @options = { headers: {
+        "x-token" => token,
+        "Content-Type" => 'application/json'
+      } }
     end
 
     # Public: Creates a draft invoice and accepts a body containing
