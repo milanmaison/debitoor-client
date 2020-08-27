@@ -61,6 +61,12 @@ module Debitoor
       respond_with!(response)
     end
 
+
+    def get_products
+      response = self.class.post("/api/products/v1", @options)
+      respond_with!(response)
+    end
+
     private
 
     def invoice_id(id_or_response_invoice)
