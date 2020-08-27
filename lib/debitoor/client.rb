@@ -63,7 +63,7 @@ module Debitoor
 
 
     def get_products
-      response = self.class.post("/api/products/v1", @options)
+      response = self.class.get("/api/products/v1", @options)
       respond_with!(response)
     end
 
