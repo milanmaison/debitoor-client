@@ -14,7 +14,8 @@ module Debitoor
       } }
     end
 
-    # Public: Creates a draft invoice and accepts a body containing
+    # Draft invoices & Invoices ------
+
     def create_draft_invoice(options={})
       options = options.merge!(@options)
       response = self.class.post("/api/sales/draftinvoices/v3?autonumber=true", options)
@@ -58,6 +59,50 @@ module Debitoor
       id = invoice_id(id_or_response_invoice)
 
       response = self.class.post("/api/sales/invoices/#{id}/email/v2", options) if id.present?
+      respond_with!(response)
+    end
+
+    # Draft credit notes & credit notes ------
+
+    def create_draft_credit_note(options={})
+      options = options.merge!(@options)
+      response = self.class.post("/api/sales/draftcreditnotes/v3?autonumber=true", options)
+      respond_with!(response)
+    end
+
+    def book_draft_credit_note(id_or_response_credit_note)
+      options = {
+        query: {updateAutonumber: true, autonumbering: true, autonumber: true}
+      }.merge!(@options)
+
+      response = nil
+      id = invoice_id(id_or_response_credit_note)
+
+      response = self.class.post("/api/sales/draftcreditnotes/#{id}/book/v3", options) if id.present?
+      respond_with!(response)
+    end
+
+    def share_credit_note(id_or_response_credit_note, email, subject="Here's your receipt")
+      options = {
+        body: {recipient: email, subject: subject}.to_json
+      }.merge!(@options)
+
+      response = nil
+      id = invoice_id(id_or_response_credit_note)
+
+      response = self.class.post("/api/sales/creditnotes/#{id}/share/v1", options) if id.present?
+      respond_with!(response)
+    end
+
+    def email_credit_note(id_or_response_credit_note, email, subject="Here's your receipt", message="")
+      options = {
+        body: {recipient: email, subject: subject, message: message}.to_json
+      }.merge!(@options)
+
+      response = nil
+      id = invoice_id(id_or_response_credit_note)
+
+      response = self.class.post("/api/sales/creditnotes/#{id}/email/v2", options) if id.present?
       respond_with!(response)
     end
 
